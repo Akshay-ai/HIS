@@ -14,10 +14,24 @@ const LoginForm = (props) => {
             body : JSON.stringify({username : credentials.username, password : credentials.password})
         });
         const json = await response.json();
-        if(json.success) {
+        console.log(json.role);
+        if(json.role === 'admin') {
             localStorage.setItem('token', json.authToken);
             localStorage.setItem('username', credentials.username);
-            // props.showAlert("Successfully Logged in", "success");
+            localStorage.setItem('role', json.role);
+            history('/admin');
+        }
+        if(json.role === 'test') {
+            localStorage.setItem('token', json.authToken);
+            localStorage.setItem('username', credentials.username);
+            localStorage.setItem('role', json.role);
+            console.log("Entered to recp");
+            history('/recp');
+        }
+        else if(json.success) {
+            localStorage.setItem('token', json.authToken);
+            localStorage.setItem('username', credentials.username);
+            props.showAlert("Successfully Logged in", "success");
             history('/doctor');
         }
         else {
@@ -28,10 +42,11 @@ const LoginForm = (props) => {
         setCredentials({...credentials, [e.target.name]: e.target.value});
     }
     return (
-        <div className='container col-6 col-offset-6' style={{backgroundImage : `url(${require("./sethascope.jpg")})`, backgroundPosition: 'center',
+
+        <div className='container col-4 col-offset-4 my-5' style={{backgroundImage : `url(${require("./image/sethascope.jpg")})`, backgroundPosition: 'center',
         backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat', borderRadius : "10px", marginTop : "70px", height: "500px"}}>
-            <form onSubmit={handleSubmit}>
+        backgroundRepeat: 'no-repeat', borderRadius : "10px", height : "65vh" , width : "75vh"}}>
+            <form onSubmit={handleSubmit} className='container'>
                 <div className="form-group my-3">
                     <label className='mt-3' htmlFor="username">Username</label>
                     <input onChange={onChange} value={credentials.username} type="text" className="form-control my-1" id="username" name='username' aria-describedby="emailHelp" placeholder="Enter Username"/>

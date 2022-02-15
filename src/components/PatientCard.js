@@ -17,6 +17,10 @@ const PatientCard = (props) => {
     let symBtn =useRef(null);
     let symBtnDone =useRef(null);
 
+    let prescription =useRef(null);
+    let prescriptionBtn =useRef(null);
+    let prescriptionBtnDone =useRef(null);
+
     const editDiet = () => {
         diet.current.contentEditable = true;
         diet.current.style.border = "2px solid black";
@@ -35,6 +39,25 @@ const PatientCard = (props) => {
         dietBtn.current.style.display = "inline";
         dietBtnDone.current.style.display = "none";
         editPatientDetail(props.patient._id, props.patient.symptoms, props.patient.diet, props.patient.description)
+    }
+    
+    const editprescription = () => {
+        prescription.current.contentEditable = true;
+        prescription.current.style.border = "2px solid black";
+        prescription.current.focus();
+        prescription.current.style.backgroundColor = "white";
+        prescriptionBtn.current.style.display = "none";
+        prescriptionBtnDone.current.style.display = "inline";
+    }
+
+    const submitprescription = () => {
+        props.patient.prescription = diet.current.textContent
+        prescription.current.contentEditable = true;
+        prescription.current.style.backgroundColor = "";
+        prescription.current.style.border = "0px solid black";
+        prescriptionBtn.current.style.display = "inline";
+        prescriptionBtnDone.current.style.display = "none";
+        editPatientDetail(props.patient._id, props.patient.symptoms, props.patient.diet, props.patient.description, props.patient.prescription)
     }
 
     const editDes = () => {
@@ -79,7 +102,7 @@ const PatientCard = (props) => {
 
     return (
         <div className='col-md-3'>
-            <div className="card text-dark bg-info my-3" style={{maxWidth : "18rem"}}>
+            <div className="card text-dark bg-info mb-4" style={{maxWidth : "18rem"}}>
                 <div className="card-header">{props.patient.name}</div>
                 <div className="card-body">
                     <h5 className="card-title">Symptoms</h5>
@@ -93,6 +116,11 @@ const PatientCard = (props) => {
                         {!props.patient.diet ? <p ref={diet} className="card-text">No diet Given </p> : props.patient.diet.length !== 0 ? <p ref={diet} className="card-text">{props.patient.diet}</p> : <p ref={diet} className="card-text">No diet Given </p>  }
                         <i ref={dietBtn} onClick={() => editDiet()} style={{cursor : "pointer"}}  className="far fa-edit"></i>
                         <i ref={dietBtnDone} onClick={() => submitDiet()} style={{display:'none',cursor : "pointer" }} className="fas fa-clipboard-list"></i>
+                    </div>
+                    <div className='d-flex justify-content-between mt-2'>
+                        {!props.patient.prescription ? <p ref={prescription} className="card-text">No prescription Given </p> : props.patient.prescription.length !== 0 ? <p ref={prescription} className="card-text">{props.patient.prescription}</p> : <p ref={prescription} className="card-text">No prescription Given </p>  }
+                        <i ref={prescriptionBtn} onClick={() => editprescription()} style={{cursor : "pointer"}}  className="far fa-edit"></i>
+                        <i ref={prescriptionBtnDone} onClick={() => submitprescription()} style={{display:'none',cursor : "pointer" }} className="fas fa-clipboard-list"></i>
                     </div>
                     <h5 className="card-title">Description</h5>
                     <div id='desp' className='d-flex justify-content-between mt-2'>

@@ -29,6 +29,6 @@ app.use('/doctor', doctorRouter);
 app.use('/login', loginRouter);
 app.use('/resetpassword', resetRouter);
 
-app.listen(port,()=>{
+app.listen(port, ()=>{
     console.log(`Example App Listening at http://localhost:${port}`);
 })

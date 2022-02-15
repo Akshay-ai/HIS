@@ -14,6 +14,10 @@ import Alert from './components/Alert';
 import Doctor from './components/Doctor';
 import InfoState from './context/details/InfoState';
 import Home from './components/Home';
+import Admin from './components/Admin';
+import AddDoctor from './components/AddDoctor';
+import Patient from './components/Patient';
+import Recp from './components/Recp';
 
 function App() {
   const [alert, setAlert] = useState(null);
@@ -24,7 +28,7 @@ function App() {
     })
     setTimeout(() => {
       setAlert(null);
-    },5000)
+    },7000)
   }
   return (
     <>
@@ -38,6 +42,10 @@ function App() {
               <Route exact path="/login" element={<LoginForm showAlert = {showAlert}/>}/>
               <Route exact path="/doctor" element={<Doctor showAlert = {showAlert}/>}/>
               <Route exact path="/" element={<Home showAlert = {showAlert}/>}/>
+              <Route exact path="/admin" element={<Admin showAlert = {showAlert}/>}/>
+              <Route exact path="/adddoctor" element={<AddDoctor showAlert = {showAlert}/>}/>
+              <Route exact path="/patients" element={<Patient showAlert = {showAlert}/>}/>
+              <Route exact path="/recp" element={<Recp showAlert = {showAlert}/>}/>
             </Routes>
           </div>
         </Router>

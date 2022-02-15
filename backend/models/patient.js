@@ -12,18 +12,6 @@ const prescriptionSchema = new mongoose.Schema({
     timestamps : true,
 });
 
-const reportSchema = new mongoose.Schema({
-    testname : {
-        type : String,
-    },
-    files : {
-        type : String
-    },
-},
-{
-    timestamps : true,
-});
-
 const PatientSchema = new mongoose.Schema({
     name : {
         type : String,
@@ -48,12 +36,16 @@ const PatientSchema = new mongoose.Schema({
     diet : {
         type : String
     },
-    prescription : [prescriptionSchema],
+    prescription : String,
     //About Patient Problem
     description : {
         type : String
     },
-    reports : [reportSchema],
+    token : {
+        type : String
+    },
+    timings : String,
+    dateOfAppointment : String,
 },{
     timestamps : true,
 });

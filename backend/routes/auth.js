@@ -12,11 +12,11 @@ loginRouter.route("/")
 .post(async (req, res) => {
     try {
         let success = false;
-        console.log(req.body.username);
         var doctor = await Doctors.findOne({username : req.body.username});
         console.log(doctor);
         if(!doctor) res.status(400).json({error : "Login with correct details"});
         const passwordCompare = await bcryptjs.compare(req.body.password, doctor.password);
+        console.log(passwordCompare);
         if(!passwordCompare) {
             res.status(400).json({error : "Login with correct details"});
         }

@@ -34,7 +34,7 @@ patientRouter.route("/")
     res.end("Put is not possible");
 })
 .delete(verify.verifyUser, verify.verifyAdmin, async (req, res) => {
-    let patients = await Patients.remove({});
+    let patients = await Patients.deleteMany({});
     if(patients) {
         res.setHeader('Content-Type', 'application/json');
         res.status(200).send(patients);
@@ -202,12 +202,24 @@ patientRouter.route("/patients/getbyname")
 .post(async (req, res) => {
     console.log(req.body.doctor_name);
     let patients = await Patients.find({doctor_name : req.body.doctor_name});
-    let success = false
     if(patients) {
         res.status(200).json(patients)
     }
     else {
         res.send("No patients found")
+    }
+})
+
+patientRouter.route("/patients/gettoken/token/id/work")
+.post(async (req, res) => {
+    console.log("Entered");
+    let patients = await Patients.findOne({token : req.body.token});
+    console.log(patients);
+    if(patients) {
+        res.status(200).json(patients);
+    }
+    else {
+        res.send("No patients found");
     }
 })
 

@@ -9,6 +9,18 @@ const desSchema = new mongoose.Schema({
     },
 });
 
+const timeSchema = new mongoose.Schema({
+    date : String ,
+    time : [{
+        value : { type : String},
+        count : {
+            type : Number,
+            default : 0,
+            max : 5,
+        }
+    }]
+});
+
 const doctorSchema = new mongoose.Schema({
     name : {
         type : String,
@@ -27,10 +39,7 @@ const doctorSchema = new mongoose.Schema({
         type : String,
         required : true,
     },
-    desription : {
-        type : String,
-        required : true,
-    },
+    description : desSchema,
     field : {
         type : String,
         required : true,
@@ -39,7 +48,7 @@ const doctorSchema = new mongoose.Schema({
         type : String,
         default : "doctor"
     },
-    // timings : [mongoose.Schema.Types.Mixed],
+    timings : [timeSchema],
     
 },
 {strict: false},
