@@ -18,7 +18,7 @@ const PatientSchema = new mongoose.Schema({
         required : true,
     },
     Phone_Number : {
-        type : Number,
+        type : String,
         required : true,
         minlength : 10,
         maxlength : 10

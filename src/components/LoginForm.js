@@ -1,9 +1,22 @@
-import React, {useState} from 'react'
-import {useNavigate} from 'react-router-dom';
+import React, {useState, useEffect} from 'react'
+import {useNavigate, useLocation} from 'react-router-dom';
 
 const LoginForm = (props) => {
     const [credentials, setCredentials] = useState({username : "", password : ""});
     let history = useNavigate();
+    useEffect(() => {
+        if(localStorage.getItem('role')) {
+            var role = localStorage.getItem('role');
+            if(role === 'admin') history('/adddoctor');
+            else history('/recp');
+            return;
+        }
+        else {
+            const uname =  localStorage.getItem('username')
+            if(uname) history('/doctor');
+            return;
+        } ;
+    }, [])
     const handleSubmit = async (e) => {
         e.preventDefault();
         const response = await fetch("http://localhost:5000/login", {
@@ -16,10 +29,12 @@ const LoginForm = (props) => {
         const json = await response.json();
         console.log(json.role);
         if(json.role === 'admin') {
+            console.log("I am admin");
             localStorage.setItem('token', json.authToken);
             localStorage.setItem('username', credentials.username);
             localStorage.setItem('role', json.role);
-            history('/admin');
+            history('/adddoctor');
+            return;
         }
         if(json.role === 'test') {
             localStorage.setItem('token', json.authToken);
@@ -27,12 +42,16 @@ const LoginForm = (props) => {
             localStorage.setItem('role', json.role);
             console.log("Entered to recp");
             history('/recp');
+            return;
         }
         else if(json.success) {
+            console.log("I am doctor");
+            localStorage.setItem('role', json.role);
             localStorage.setItem('token', json.authToken);
             localStorage.setItem('username', credentials.username);
             props.showAlert("Successfully Logged in", "success");
             history('/doctor');
+            return;
         }
         else {
             props.showAlert("Invalid Details", "danger");

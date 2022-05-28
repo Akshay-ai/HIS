@@ -1,7 +1,5 @@
 import React from 'react'
 const RecpCard = (props) => {
-    const {patient} = props;
-    console.log(patient);
     return (
         <div className='col-md-3'>
             <div className="card text-dark bg-info mb-4" style={{maxWidth : "18rem"}}>

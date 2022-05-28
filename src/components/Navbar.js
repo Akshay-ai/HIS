@@ -5,8 +5,7 @@ import {useNavigate} from 'react-router-dom';
 const Navbar = () => {
     let history = useNavigate();
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('role');
+        localStorage.clear();
         history('/login');
     }
     return (
@@ -23,12 +22,13 @@ const Navbar = () => {
                         <Link className="nav-link active" aria-current="page" to="/">Home</Link>
                     </li>
                 </ul>
-                {localStorage.getItem('role') == 'admin'? <form className="d-flex">
+                {localStorage.getItem('role') === 'admin'? <form className="d-flex">
                 <Link className="btn mx-2" style={{color:"white"}} to="/adddoctor" role="button">Add Doctor</Link>
                 <Link className="btn mx-2" style={{color:"white"}} to="/admin" role="button">Doctors</Link>
                 <Link className="btn mx-2" style={{color:"white"}} to="/patients" role="button">Patients</Link>
                 <button onClick={handleLogout} className="btn" style={{color:"white"}}>Logout</button>
                 </form> : localStorage.getItem('role') === 'test' ? <form className="d-flex">
+                <Link className="btn mx-2" style={{color:"white"}} to="/recp" role="button">Appointment</Link>
                 <button onClick={handleLogout} className="btn" style={{color:"white"}}>Logout</button>
                 </form> :  !localStorage.getItem('token') ? <form className="d-flex">
                 <Link className="btn mx-2" style={{color:"white"}} to="/appointment" role="button">Book Appointment</Link>

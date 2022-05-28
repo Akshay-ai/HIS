@@ -1,8 +1,20 @@
 import React, {useContext, useEffect} from 'react'
+import { useNavigate } from 'react-router-dom';
 import InfoContext from '../context/details/infoContext'
 import PatientCard from './PatientCard'
 
 const Doctor = (props) => {
+    let history = useNavigate();
+    useEffect(() => {
+        if(localStorage.getItem('role')) {
+            var role = localStorage.getItem('role');
+            if(role === 'doctor') ;
+            else history('/login');
+        }
+        else {
+            history('/login');
+        } ;
+    }, [])
     const context = useContext(InfoContext)
     const {patients, getPatientByDoctorName} = context;
     useEffect(() => {

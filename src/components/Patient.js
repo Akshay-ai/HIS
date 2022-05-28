@@ -1,9 +1,22 @@
 import React, {useEffect, useContext, useState, useRef} from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import InfoContext from '../context/details/infoContext'
 import PatientCard from './PatientCard'
 
 const Patient = (props) => {
-    const [info, setInfo] = useState({branch : "Hyderabad", specality : "Anesthesiologists",  doctorname :  "Hulk"});
+    let history = useNavigate();
+    const location = useLocation();
+    useEffect(() => {
+        if(localStorage.getItem('role')) {
+            var role = localStorage.getItem('role');
+            if(role === 'admin') ;
+            else history(`${location.pathname}`);
+        }
+        else {
+            history(`${location.pathname}`);
+        } ;
+    }, [])
+    const [info, setInfo] = useState({branch : "Hyderabad", specality : "Anesthesiologists",  doctorname :  ""});
     var editDoctor = useRef(null);
     const context = useContext(InfoContext)
     const {patients, getPatientByDoctorNameforAdmin} = context;
@@ -23,8 +36,11 @@ const Patient = (props) => {
             body : JSON.stringify({field : info.specality, branch : info.branch}),
         });
         const json = await response.json();
+        console.log(json);
         if(!json.doctor.length) {
             editDoctor.current.options.length = 0;
+            info.doctorname = '';
+            getPatientByDoctorNameforAdmin(info.doctorname);
             return
         }
         if(json.success) {
@@ -35,13 +51,14 @@ const Patient = (props) => {
                     editDoctor.current.add(new Option(json.doctor[index].username,json.doctor[index].username));
                 }
             }
+            getPatientByDoctorNameforAdmin(info.doctorname);
         }
+        
     }
     useEffect(() => {
         onChangeSpecality();
-        console.log(info);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [info]);
+    }, [info.specality, info.branch]);
 
     const onChange = (e) => {
         setInfo({...info, [e.target.name]: e.target.value});    
@@ -92,6 +109,7 @@ const Patient = (props) => {
                 <div className="form-group my-2">
                     <label htmlFor="doctorname">Select Doctor</label>
                     <select onChange={onChange} value={info.doctorname} ref={editDoctor} className="form-control" name='doctorname' id="doctorname">
+                        {/* <option>Select Docter</option> */}
                     </select>
                 </div>
             </form>

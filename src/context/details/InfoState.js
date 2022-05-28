@@ -104,14 +104,14 @@ const InfoState = (props) => {
         console.log("From Info State ",json);
     }
 
-    const editPatientDetail = async (id, symptoms, diet, description) => {
+    const editPatientDetail = async (id, symptoms, diet, description, prescription) => {
         const response = await fetch(`http://localhost:5000/patient/${id}`, {
             method : 'PUT',
             headers : {
                 'Content-Type' : 'application/json',
                 'auth-token' : localStorage.getItem('token'),
             },
-            body : JSON.stringify({symptoms, diet, description})
+            body : JSON.stringify({symptoms, diet, description, prescription})
         });
         const json = await response.json();
         console.log(json);

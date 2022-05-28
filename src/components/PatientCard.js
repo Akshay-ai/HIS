@@ -38,7 +38,7 @@ const PatientCard = (props) => {
         diet.current.style.border = "0px solid black";
         dietBtn.current.style.display = "inline";
         dietBtnDone.current.style.display = "none";
-        editPatientDetail(props.patient._id, props.patient.symptoms, props.patient.diet, props.patient.description)
+        editPatientDetail(props.patient._id, props.patient.symptoms, props.patient.diet, props.patient.description, props.patient.prescription)
     }
     
     const editprescription = () => {
@@ -51,7 +51,7 @@ const PatientCard = (props) => {
     }
 
     const submitprescription = () => {
-        props.patient.prescription = diet.current.textContent
+        props.patient.prescription = prescription.current.textContent
         prescription.current.contentEditable = true;
         prescription.current.style.backgroundColor = "";
         prescription.current.style.border = "0px solid black";
@@ -77,7 +77,7 @@ const PatientCard = (props) => {
         des.current.style.border = "0px solid black";
         desBtn.current.style.display = "inline";
         desBtnDone.current.style.display = "none";
-        editPatientDetail(props.patient._id, props.patient.symptoms, props.patient.diet, props.patient.description)
+        editPatientDetail(props.patient._id, props.patient.symptoms, props.patient.diet, props.patient.description, props.patient.prescription)
     }
 
     const editSym = () => {
@@ -97,7 +97,7 @@ const PatientCard = (props) => {
         sym.current.style.border = "0px solid black";
         symBtn.current.style.display = "inline";
         symBtnDone.current.style.display = "none";
-        editPatientDetail(props.patient._id, props.patient.symptoms, props.patient.diet, props.patient.description)
+        editPatientDetail(props.patient._id, props.patient.symptoms, props.patient.diet, props.patient.description, props.patient.prescription)
     }
 
     return (
@@ -117,6 +117,7 @@ const PatientCard = (props) => {
                         <i ref={dietBtn} onClick={() => editDiet()} style={{cursor : "pointer"}}  className="far fa-edit"></i>
                         <i ref={dietBtnDone} onClick={() => submitDiet()} style={{display:'none',cursor : "pointer" }} className="fas fa-clipboard-list"></i>
                     </div>
+                    <h5 className="card-title">Prescription</h5>
                     <div className='d-flex justify-content-between mt-2'>
                         {!props.patient.prescription ? <p ref={prescription} className="card-text">No prescription Given </p> : props.patient.prescription.length !== 0 ? <p ref={prescription} className="card-text">{props.patient.prescription}</p> : <p ref={prescription} className="card-text">No prescription Given </p>  }
                         <i ref={prescriptionBtn} onClick={() => editprescription()} style={{cursor : "pointer"}}  className="far fa-edit"></i>

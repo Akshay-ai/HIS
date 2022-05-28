@@ -5,12 +5,21 @@ const AppointmentForm = (props) => {
     const editDoctor = useRef(null);
     const docTiming = useRef(null);
     const submit = useRef(null);
+    const success = useRef(null);
     var flag = 0;
     const context = useContext(InfoContext)
     const {getDoctorTimings, setDoctorTiming} = context;
-    let date = new Date().getFullYear() + '-' + new Date().getMonth() + 1 + '-' + new Date().getDate()
-    let maxDate = new Date().getFullYear() + '-' + new Date().getMonth() + 3 + '-' + new Date().getDate()
-    const [info, setInfo] = useState({name : "", number : "", branch : "Hyderabad", symptoms : "", specality : "Anesthesiologists", doctorname :  "Hulk" , date : date, time : "10:00 - 12:30"});
+    let date = new Date().getFullYear() + '-' + (parseInt(new Date().getMonth()) + 1) + '-' + new Date().getDate()
+    let maxDate = new Date().getFullYear() + '-' + (parseInt(new Date().getMonth()) + 3) + '-' + new Date().getDate()
+    if(date[5] !== '1') {
+        date = date.slice(0, 5) + "0" + date.slice(5);
+    }
+    if(maxDate[5] !== '1') {
+        maxDate = maxDate.slice(0, 5) + "0" + maxDate.slice(5);
+    }
+    console.log(date);
+    const [info, setInfo] = useState({name : "", number : "", branch : "Hyderabad", symptoms : "", specality : "Anesthesiologists", doctorname :  "Hulk" , date : date, time : ""});
+    const [result, setResult] = useState({value : ""});
     const onChangeSpecality = async () => {
         const response = await fetch("http://localhost:5000/doctor/docs/docField", {
             method : 'POST',
@@ -36,6 +45,12 @@ const AppointmentForm = (props) => {
     }
 
     const available = async () => {
+        if(info.time.length === 0) {
+            console.log("Akshay");
+            submit.current.style.display = 'none';
+            docTiming.current.textContent = '';
+            return;
+        }
         var getTiming = await getDoctorTimings(info.date, info.doctorname, info.time);
         console.log("Hello world ",getTiming);
         if(getTiming) {
@@ -49,7 +64,7 @@ const AppointmentForm = (props) => {
             submit.current.style.display = 'none';
         }
     }
-    
+
     useEffect(() => {
         available();
         console.log(info);
@@ -71,28 +86,35 @@ const AppointmentForm = (props) => {
         }
         e.preventDefault();
         setDoctorTiming(info.date, info.doctorname, info.time);
-        var result = '';
+        let r = '';
         var characters = 'abcdefghijklmnopqrstuvwxyz';
         var charactersLength = characters.length;
-        result += characters.charAt(Math.floor(Math.random() * 
+        r += characters.charAt(Math.floor(Math.random() * 
         charactersLength));
         var val = Math.floor(100 + Math.random() * 900);
-        result = result + val;
+        r = r + val;
+        console.log(r);
+        result.value = r;
+        console.log(result.value);
         const response = await fetch("http://localhost:5000/patient", {
             method : 'POST',
             headers : {
                 'Content-Type' : 'application/json',
             },
-            body : JSON.stringify({name : info.name, Phone_Number : info.number, doctor_name : info.doctorname, symptoms : info.symptoms, token : result, timings : info.time, dateOfAppointment : info.date}),
+            body : JSON.stringify({name : info.name, Phone_Number : info.number, doctor_name : info.doctorname, symptoms : info.symptoms, token : result.value, timings : info.time, dateOfAppointment : info.date}),
         });
         console.log("Doctor Name ", info.doctorname);
         const json = await response.json();
         if(json.success) {
-            props.showAlert(`Appointment Booked SuccessFully your token number is ${result}`, "success");
+            props.showAlert(`Appointment Booked SuccessFully your token number is ${result.value}`, "success");
         }
         else {
             props.showAlert("Appointment din't booked Try Again", "danger");
-        }
+        }  
+        success.current.style.display = 'block';
+        setTimeout(() => {
+            success.current.style.display = 'none';
+        }, 5000)
     }
     return (
         <div style={{height : "100%", width : "100%", backgroundImage : `url(${require("./image/hosp.jpg")})`,backgroundSize: 'cover', backgroundPosition: 'center',
@@ -106,7 +128,7 @@ const AppointmentForm = (props) => {
                 </div>
                 <div className="form-group my-2">
                     <label htmlFor="phone">Mobile Number</label>
-                    <input minLength={10} maxLength={10} onChange={onChange} value={info.number} type="number" required className="form-control" id="phone" name='number' placeholder="Enter Your Mobile Number"/>
+                    <input minLength="10" maxLength="10" onChange={onChange} value={info.number} type="text" required className="form-control" id="phone" name='number' placeholder="Enter Your Mobile Number"/>
                 </div>
                 <div className="form-group my-2">
                     <label htmlFor="branch">Select Branch</label>
@@ -178,6 +200,7 @@ const AppointmentForm = (props) => {
                 </div>
                 <div ref={docTiming} className='my-2'></div>
                 <button ref={submit} type="submit" className="my-2 btn btn-primary p-2">Book Appointment</button>
+                <h1 ref={success} style={{fontSize : "20px", display : "none", height : "50px", backgroundColor : "green", color : "white", fontWeight : "500" }}>Appointement Successfull , Your code is {result.value}</h1>
             </form>
         </div>
         </div>

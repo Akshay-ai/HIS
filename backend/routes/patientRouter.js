@@ -212,14 +212,12 @@ patientRouter.route("/patients/getbyname")
 
 patientRouter.route("/patients/gettoken/token/id/work")
 .post(async (req, res) => {
-    console.log("Entered");
     let patients = await Patients.findOne({token : req.body.token});
-    console.log(patients);
     if(patients) {
         res.status(200).json(patients);
     }
     else {
-        res.send("No patients found");
+        res.json({success : false});
     }
 })
 

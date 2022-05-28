@@ -1,7 +1,20 @@
 import React, {useContext, useState, useRef, useEffect} from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
 import InfoContext from '../context/details/infoContext'
 
 const AddDoctor = (props) => {
+    let history = useNavigate();
+    const location = useLocation();
+    useEffect(() => {
+        if(localStorage.getItem('role')) {
+            var role = localStorage.getItem('role');
+            if(role === 'admin') ;
+            else history(`${location.pathname}`);
+        }
+        else {
+            history(`${location.pathname}`);
+        } ;
+    }, [])
     const context = useContext(InfoContext)
     const {addDoctor} = context;
     const [info, setInfo] = useState({name : "", username : "", password : "", branch : "Hyderabad", specality : "Anesthesiologists", description : "", pic : "", role : ""});

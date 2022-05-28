@@ -1,8 +1,21 @@
 import React, {useState, useContext, useEffect} from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
 import InfoContext from '../context/details/infoContext'
 import DoctorCard from './DoctorCard';
 
 const Admin = (props) => {
+    let history = useNavigate();
+    const location = useLocation();
+    useEffect(() => {
+        if(localStorage.getItem('role')) {
+            var role = localStorage.getItem('role');
+            if(role === 'admin') ;
+            else history(`${location.pathname}`);
+        }
+        else {
+            history(`${location.pathname}`);
+        } ;
+    }, [])
     const [info, setInfo] = useState({branch : "Hyderabad", specality : "Anesthesiologists"});
     const onChange = (e) => {
         setInfo({...info, [e.target.name]: e.target.value});    
@@ -11,6 +24,7 @@ const Admin = (props) => {
     const {onChangeSpecality, doctor} = context;
     useEffect(() => {
         if(localStorage.getItem('role')) {
+            console.log(info);
             onChangeSpecality(info.specality, info.branch);
         }
         // eslint-disable-next-line
